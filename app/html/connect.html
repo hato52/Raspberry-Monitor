@@ -22,9 +22,11 @@
       <br>
 
       <div id="connection">
-        <img v-bind:src="img_url">
+        <img v-if="isDisplayed" src="../../assets/progress.gif">
         <p>{{ progress }}</p>
-        <button class="btn btn-primary mt-3" id="connect_btn" v-on:click="startConnection">ラズベリーパイに接続</button>
+        <button class="btn btn-primary mt-3" id="connect_btn" v-bind:disabled="isDisabled" v-on:click="startConnection">
+          ラズベリーパイに接続
+        </button>
       </div>
     </div>
 
