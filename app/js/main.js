@@ -7,11 +7,11 @@ const RASPBERRY_PI_ADDRESS = "B8:27:EB:CF:0F:53";
 
 app.on("ready", () => {
     win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1000,
+        height: 800,
         resizable: false
     });
-    win.loadFile("./app/html/connect.html");
+    win.loadFile("./app/html/allocation.html");
     win.on("closed", () => {
         win = null;
     });
@@ -35,10 +35,10 @@ ipcMain.on("BT_CONNECT", (event, arg) => {
         //接続した際の処理
         btSerial.connect(RASPBERRY_PI_ADDRESS, channel, () => {
             console.log("connected!");
-            win.loadFile("./app/html/index.html");
+            win.loadFile("./app/html/allocation.html");
 
             //データを送信
-            btSerial.write(new Buffer('my data', 'utf-8'), (err, bytesWritten) => {
+            btSerial.write(new Buffer("my data", "utf-8"), (err, bytesWritten) => {
                 if (err) console.log(err);
             });
 
@@ -69,8 +69,12 @@ function createPipe() {
     let server = net.createServer((stream) => {
         console.log("Server: on connection");
 
-        stream.on("data", (c) => {
-            console.log("Server on data: ", c.toString());
+        //モーション検出を受け取ったらラズパイにデータを送信
+        stream.on("data", (data) => {
+            console.log("Server on data: ", data.toString());
+            btSerial.write(new Buffer(data.toString(), "utf-8"), (err, bytesWritten) => {
+                if (err) console.log(err);
+            });
         });
 
         stream.on("end", () => {

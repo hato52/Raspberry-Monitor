@@ -1,0 +1,79 @@
+<html>
+  <head>
+		<meta charset="UTF-8">
+		<title>Raspberry Monitor</title>
+		<link rel="stylesheet" href="../lib/bootstrap-4.1.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../lib/simple-sidebar.css">
+		<link rel="stylesheet" href="../lib/font/css/open-iconic-bootstrap.css">
+		<link rel="stylesheet" href="../css/index.css">
+    <!--このscriptを埋め込むことで、jqueryを有効化する -->
+    <script>
+      window.nodeRequire = require;
+      delete window.require;
+      delete window.exports;
+      delete window.module;
+    </script>
+
+    <script src="../lib/vue.js"></script>
+    <script src="../lib/jquery-3.3.1.min.js"></script>
+		<script src="../lib/bootstrap-4.1.3/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+
+		<div id="wrapper" class="toggled">
+
+		<!-- Sidebar -->
+			<div id="sidebar-wrapper">
+				<ul class="sidebar-nav">
+					<li class="sidebar-brand">
+						<a href="#">
+							<b>Raspberry Monitor</b>
+						</a>
+					</li>
+					<li>
+						<a href="allocation.html">ジェスチャ割り当て</a>
+					</li>
+					<li>
+						<a href="#">リスト</a>
+					</li>
+				</ul>
+			</div>
+	
+			<!-- Page Content -->
+			<div class="content">
+				<h3>リスト</h3>
+				<br>
+
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th scope="col">名称</th>
+								<th scope="col">タグ</th>
+								<th scope="col">登録</th>
+							</tr>
+						</thead>
+						<tbody>
+							<td class="align-middle">hoge</td>
+							<td class="align-middle">a</td>
+							<td class="align-middle">not use</td>
+						</tbody>
+						<tbody>
+								<td class="align-middle">fuga</td>
+								<td class="align-middle">b</td>
+								<td class="align-middle">PULL</td>
+							</tbody>
+					</table>
+				</div>
+				<br>
+				
+				<div class="text-right">
+					<button class="btn btn-outline-primary">
+						<span class="oi oi-plus"></span>
+						追加
+					</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
