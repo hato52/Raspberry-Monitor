@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain} = require("electron");
 const btSerial = new (require("bluetooth-serial-port")).BluetoothSerialPort();
 const net = require("net");
+const fs = require("fs");
 
 let win;
 const RASPBERRY_PI_ADDRESS = "B8:27:EB:CF:0F:53";
@@ -24,6 +25,17 @@ app.on("window-all-closed", () => {
     }
 });
 
+//データをrender側に送信
+ipcMain.on("REQUEST_GESTURE_DATA", (event, arg) => {
+    let gesture = JSON.parse(fs.readFileSync(__dirname + "/../../assets/gesture_data.json", "utf8", (err) => {
+        if (err) {
+            return console.log(err);
+        }
+    }));
+    event.sender.send("SEND_GESTURE_DATA", gesture);
+});
+
+//Bluetoothでラズパイへの接続を行う
 ipcMain.on("BT_CONNECT", (event, arg) => {
     console.log("start search device");
 
@@ -56,6 +68,7 @@ ipcMain.on("BT_CONNECT", (event, arg) => {
         //findSerialPortChannelのエラーコールバック
         console.log("found nothing");
         event.sender.send("FAILED", "接続に失敗")
+        btSerial.close();
     });
 
     //デバイスの探索を開始

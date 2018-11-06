@@ -25,7 +25,7 @@
       <div id="connection">
         <img v-if="isDisplayed" src="../../assets/progress.gif">
         <p>{{ progress }}</p>
-        <button class="btn btn-primary mt-3" id="connect_btn" v-bind:disabled="isDisabled" v-on:click="startConnection">
+        <button class="btn btn-outline-primary mt-3" id="connect_btn" v-bind:disabled="isDisabled" v-on:click="startConnection">
           ラズベリーパイに接続
         </button>
       </div>

@@ -31,16 +31,38 @@
 						</a>
 					</li>
 					<li>
-						<a href="allocation.html">ジェスチャ割り当て</a>
+						<a href="allocation.html">
+							<span class="oi oi-monitor"></span>
+							ジェスチャ割り当て
+						</a>
 					</li>
 					<li>
-						<a href="#">リスト</a>
+						<a href="#">
+							<span class="oi oi-list"></span>
+							リスト
+						</a>
+					</li>
+					<br>
+
+					<li>
+						<button class="btn btn-outline-primary">
+							<span class="oi oi-power-standby"></span>
+							RealSense 起動
+						</button>
+					</li>
+					<br>
+					
+					<li>
+						<button class="btn btn-outline-danger">
+							<span class="oi oi-ban"></span>
+							切断
+						</button>
 					</li>
 				</ul>
 			</div>
 	
 			<!-- Page Content -->
-			<div class="content">
+			<div id="list" class="content">
 				<h3>リスト</h3>
 				<br>
 
@@ -54,15 +76,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<td class="align-middle">hoge</td>
-							<td class="align-middle">a</td>
-							<td class="align-middle">not use</td>
+              <tr v-for="row in rows">
+                <td class="align-middle">{{ row['name'] }}</td>
+                <td class="align-middle">{{ row['tag'] }}</td>
+								<td class="align-middle">{{ row['status'] }}</td>
+								<td class="align-middle"><button class="btn btn-outline-danger">削除</button></td>
+              </tr>
 						</tbody>
-						<tbody>
-								<td class="align-middle">fuga</td>
-								<td class="align-middle">b</td>
-								<td class="align-middle">PULL</td>
-							</tbody>
 					</table>
 				</div>
 				<br>
@@ -75,5 +95,7 @@
 				</div>
 			</div>
 		</div>
+
+		<script src="../js/list.js"></script>
 	</body>
 </html>

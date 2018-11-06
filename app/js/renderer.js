@@ -1,7 +1,7 @@
 //クライアントサイドのJavaScriptでrequireを使う際には、nodeRequireを使う
 const {ipcRenderer} = nodeRequire("electron");
 
-let vm = new Vue({
+new Vue({
     el: "#connection",
     data: {
         progress: "",
