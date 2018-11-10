@@ -8,18 +8,9 @@ let vm = new Vue({
 });
 
 //ジェスチャデータのリクエストを送信
-ipcRenderer.send("REQUEST_GESTURE_DATA");
+ipcRenderer.send("REQUEST_ACTION_DATA");
 
-//ジェスチャデータの内容を受け取る
-ipcRenderer.on("SEND_GESTURE_DATA", (event, data) => {
-    //リストの表示
-    for (row of data) {
-        let row_hash = {};
-        
-        row_hash["name"] = row.name;
-        row_hash["tag"] = row.tag;
-        row_hash["status"] = row.status;
-
-        vm.rows.push(row_hash);
-    }
+//ジェスチャデータの内容をリストのビューモデルに反映
+ipcRenderer.on("SEND_ACTION_DATA", (event, actions) => {
+    vm.rows = actions;
 });

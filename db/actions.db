@@ -1,0 +1,18 @@
+{"id":"action_6","name":"test 6","tag":"aircon","status":6,"_id":"Bksb6d2P0q2Ejq1d"}
+{"id":"action_5","name":"test 5","tag":"hoge","status":5,"_id":"SScmSsndNUQFFapo"}
+{"id":"action_1","name":"test 1","tag":"aircon","status":1,"_id":"Ty5NlcSIlfzXHn2S"}
+{"id":"action_3","name":"test 3","tag":"aircon","status":3,"_id":"YOWZKsMAbP4XXJxo"}
+{"id":"action_4","name":"test not use","tag":"aircon","status":0,"_id":"b8AVPXJkL8Qcxjdm"}
+{"id":"action_2","name":"test 2","tag":"aircon","status":2,"_id":"ex2yDtloP1p6n6VA"}
+{"$$deleted":true,"_id":"Bksb6d2P0q2Ejq1d"}
+{"$$deleted":true,"_id":"SScmSsndNUQFFapo"}
+{"$$deleted":true,"_id":"Ty5NlcSIlfzXHn2S"}
+{"$$deleted":true,"_id":"YOWZKsMAbP4XXJxo"}
+{"$$deleted":true,"_id":"b8AVPXJkL8Qcxjdm"}
+{"$$deleted":true,"_id":"ex2yDtloP1p6n6VA"}
+{"id":"action_1","name":"test 1","tag":"aircon","status":1,"_id":"iH0SaeDahhwby2jL"}
+{"id":"action_2","name":"test 2","tag":"aircon","status":2,"_id":"IzpV6Hb38dR8HBJt"}
+{"id":"action_3","name":"test 3","tag":"aircon","status":3,"_id":"kWOd5NnzL6AWezYy"}
+{"id":"action_4","name":"test not use","tag":"aircon","status":0,"_id":"mC0arMnJB6dcncwJ"}
+{"id":"action_5","name":"test 5","tag":"hoge","status":5,"_id":"hKUErZELznnPQljQ"}
+{"id":"action_6","name":"test 6","tag":"aircon","status":6,"_id":"x3UytB50BSwPpeao"}

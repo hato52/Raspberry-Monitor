@@ -1,6 +1,8 @@
 const {ipcRenderer} = nodeRequire("electron");
 
-let gestures;
+let actions;
+const GESTURES = ["push", "pull", "up", "down", "right", "left"];
+let action_list = Array(GESTURES.length);
 
 let vm = new Vue({
     el: "#allocate",
@@ -23,57 +25,42 @@ let vm = new Vue({
         apply: function () {
             this.isPushed = false;
             this.isDisabled = true;
+            //プルダウンの内容を取り出してjsonを書き換え
+            rewriteData(actions);
         },
         cancel: function () {
 		    this.isPushed = false;
             this.isDisabled = true;
-
 			//プルダウンの状態を元に戻したい
         }
     }
 });
 
-//ジェスチャデータのリクエストを送信
-ipcRenderer.send("REQUEST_GESTURE_DATA");
+//動作データのリクエストを送信
+ipcRenderer.send("REQUEST_APPLIED_DATA");
 
-//ジェスチャデータの内容を受け取る
-ipcRenderer.on("SEND_GESTURE_DATA", (event, data) => {
-    gestures = data;
-    applyToPulldown(gestures);
+//動作データの内容を受け取る
+ipcRenderer.on("SEND_APPLIED_DATA", (event, actions) => {
+    //プルダウンの内容を代入
+    vm.gestures = actions;
+
+    console.log(actions);
+    
+    //selected要素の指定
+    for (action of actions) {
+        eval("vm." + action.id + " = action.action_id");    //邪悪を感じる
+    }
 });
 
-//プルダウンにJSONデータを適用
-function applyToPulldown(gestures) {
-    vm.gestures.length = 0;
-
-    for (let gesture of gestures) {
-        let gesture_hash = {};
-        gesture_hash["text"] = gesture.name;
-        gesture_hash["value"] = gesture.id;
-
-        vm.gestures.push(gesture_hash);
-
-        switch(gesture.status) {
-            case 1:
-                vm.push = gesture.id;
-                break;
-            case 2:
-                vm.pull = gesture.id;
-                break;
-            case 3:
-                vm.up = gesture.id;
-                break;
-            case 4:
-                vm.down = gesture.id;
-                break;
-            case 5:
-                vm.right = gesture.id;
-                break;
-            case 6:
-                vm.left = gesture.id;
-                break;
-            default:
-                break;
-        }
+//動作データを書き換える
+function rewriteData(actions) {
+    let applied_list = [];
+    //全種類のジェスチャを確認
+    for (let i = 0; i < GESTURES.length; i++) {
+        applied_list
+        eval("applied_list.push(vm." + GESTURES[i] + ")");  //新しく適用されたデータのID
     }
+    console.log(vm.push);
+    //データの更新要求を送る
+    ipcRenderer.send("UPDATE_APPLIED_DATA", applied_list, GESTURES);
 }
