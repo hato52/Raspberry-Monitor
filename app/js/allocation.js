@@ -40,15 +40,15 @@ let vm = new Vue({
 ipcRenderer.send("REQUEST_APPLIED_DATA");
 
 //動作データの内容を受け取る
-ipcRenderer.on("SEND_APPLIED_DATA", (event, actions) => {
+ipcRenderer.on("SEND_APPLIED_DATA", (event, applied, actions) => {
     //プルダウンの内容を代入
     vm.gestures = actions;
 
-    console.log(actions);
+    console.log(applied);
     
     //selected要素の指定
-    for (action of actions) {
-        eval("vm." + action.id + " = action.action_id");    //邪悪を感じる
+    for (a of applied) {
+        eval("vm." + a.id + " = a.action_id");    //邪悪を感じる
     }
 });
 

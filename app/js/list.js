@@ -1,11 +1,100 @@
 const {ipcRenderer} = nodeRequire("electron");
 
+let id;
+
 let vm = new Vue({
     el: "#list",
     data: {
-        rows: []
+        rows: [],
     }
 });
+
+let index_vm = new Vue({
+    el: "#modal_index",
+    data: {
+        progress: "",
+        isDisplayed: false,
+        isDisabled: false
+    },
+    methods: {
+        startCapture: function() {
+            //ボタンを無効化
+            this.isDisabled = true;
+
+            //ステータス表示の初期化
+            this.progress = "赤外線受信中";
+            this.isDisplayed = true;
+
+            //赤外線受信の開始を要求
+            ipcRenderer.send("IR_CAPTURE");
+
+            //通信ステータスの変更を反映
+            ipcRenderer.on("CHANGE_STATE", (event, arg) => {
+                this.progress = arg;
+			});
+			
+			//受信成功
+			ipcRenderer.on("IR_SUCCESS", (event, arg) => {
+                id = arg;
+                $(".modal_index").modaal("close");
+                $(".modal_entry").modaal({
+                    start_open: true
+                });
+			});
+            
+            //受信失敗
+            ipcRenderer.on("IR_FAILED", (event, arg) => {
+                this.progress = arg;
+                this.isDisabled = false;
+                this.isDisplayed = false;
+                //$(".modal_index").modaal("close");
+            });
+		},
+		cancelCapture: function() {
+            this.progress = "";
+            this.isDisabled = false;
+            this.isDisplayed = false;
+            $(".modal_index").modaal("close");
+		}
+    }
+});
+
+let entry_vm = new Vue({
+    el: "#modal_entry",
+    data: {
+        entry_name: "",
+        entry_tag: ""
+    },
+    methods: {
+        entryAction: function () {
+            //フォームのデータを取得
+            let data_hash = {};
+            data_hash["id"] = id;
+            data_hash["name"] = this.entry_name;
+            data_hash["tag"] = this.entry_tag;
+
+            //完了の通知とフォームのデータを送る
+            ipcRenderer.send("ENTRY_COMPLETE", data_hash);
+            this.progress = "";
+            this.isDisabled = false;
+            this.isDisplayed = false;
+            $(".modal_entry").modaal("close")
+        },
+        cancelCapture: function() {
+            this.progress = arg;
+            this.isDisabled = false;
+            this.isDisplayed = false;
+            $(".modal_entry").modaal("close");
+		}
+    }
+});
+
+//モーダルウィンドウの適用
+$(".modal_index").modaal({
+    hide_close: true,
+    overlay_close: false
+});
+
 
 //ジェスチャデータのリクエストを送信
 ipcRenderer.send("REQUEST_ACTION_DATA");

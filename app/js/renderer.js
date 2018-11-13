@@ -26,7 +26,7 @@ new Vue({
             });
 
             //通信失敗
-            ipcRenderer.on("FAILED", (event, arg) => {
+            ipcRenderer.on("BT_FAILED", (event, arg) => {
                 this.progress = arg;
                 this.isDisabled = false;
                 this.isDisplayed = false;

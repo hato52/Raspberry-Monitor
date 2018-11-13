@@ -77,8 +77,8 @@
 								<div class="col mr-2">
 									<label>PUSH</label>
 									<select id="push" name="push" class="custom-select" v-model="push" v-bind:disabled="isDisabled">
-										<option v-bind:value="gesture.action_id" v-for="gesture in gestures">
-                      {{ gesture.action_name }}
+										<option v-bind:value="gesture.id" v-for="gesture in gestures">
+                      {{ gesture.name }}
                     </option>
 									</select>
 								</div>
@@ -86,8 +86,8 @@
 								<div class="col mr-4">
 									<label>PULL</label>
 									<select id="pull" name="pull" class="custom-select" v-model="pull" v-bind:disabled="isDisabled">
-                    <option v-bind:value="gesture.action_id" v-for="gesture in gestures">
-                      {{ gesture.action_name }}
+                    <option v-bind:value="gesture.id" v-for="gesture in gestures">
+                      {{ gesture.name }}
                     </option>
 									</select>
 								</div>
@@ -98,8 +98,8 @@
 								<div class="col mr-2">
 									<label>UP</label>
 									<select id="up" name="up" class="custom-select" v-model="up" v-bind:disabled="isDisabled">
-                    <option v-bind:value="gesture.action_id" v-for="gesture in gestures">
-                      {{ gesture.action_name }}
+                    <option v-bind:value="gesture.id" v-for="gesture in gestures">
+                      {{ gesture.name }}
                     </option>
 									</select>
 								</div>
@@ -107,8 +107,8 @@
 								<div class="col mr-4">
 									<label>DOWN</label>
 									<select id="down" name="down" class="custom-select" v-model="down" v-bind:disabled="isDisabled">
-                    <option v-bind:value="gesture.action_id" v-for="gesture in gestures">
-                      {{ gesture.action_name }}
+                    <option v-bind:value="gesture.id" v-for="gesture in gestures">
+                      {{ gesture.name }}
                     </option>
 									</select>
 								</div>
@@ -119,8 +119,8 @@
 								<div class="col mr-2">
 									<label>RIGHT</label>
 									<select id="right" name="right" class="custom-select" v-model="right" v-bind:disabled="isDisabled">
-                    <option v-bind:value="gesture.action_id" v-for="gesture in gestures">
-                      {{ gesture.action_name }}
+                    <option v-bind:value="gesture.id" v-for="gesture in gestures">
+                      {{ gesture.name }}
                     </option>
 									</select>
 								</div>
@@ -128,8 +128,8 @@
 								<div class="col mr-4">
 									<label>LEFT</label>
 									<select id="left" name="left" class="custom-select" v-model="left" v-bind:disabled="isDisabled">
-                    <option v-bind:value="gesture.action_id" v-for="gesture in gestures">
-                      {{ gesture.action_name }}
+                    <option v-bind:value="gesture.id" v-for="gesture in gestures">
+                      {{ gesture.name }}
                     </option>
 									</select>
 								</div>

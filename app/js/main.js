@@ -13,7 +13,7 @@ app.on("ready", () => {
         height: 800,
         resizable: false
     });
-    win.loadFile("./app/html/allocation.html");
+    win.loadFile("./app/html/index.html");
     win.on("closed", () => {
         win = null;
     });
@@ -40,9 +40,8 @@ app.on("window-all-closed", () => {
 ipcMain.on("REQUEST_ACTION_DATA", (event, arg) => {
     //NeDBからデータを取り出す
     db.actions.find({}, (err, docs) => {
-        if (err) {
-            return console.log(err);
-        }
+        if (err) return console.log(err);
+
         event.sender.send("SEND_ACTION_DATA", docs);
     });
 
@@ -52,24 +51,29 @@ ipcMain.on("REQUEST_ACTION_DATA", (event, arg) => {
 ipcMain.on("REQUEST_APPLIED_DATA", (event, arg) => {
     //適用データを取得
     db.applied.find({}, (err, applied_docs) => {
-        if (err) {
-            return console.log(err);
-        }
+        if (err) return console.log(err);
 
-        let applied_list = [];
+        let applied_list = [];  //適用されているアクションのリスト
         let i = 1;
-        //適用された動作データを取得
-        for (applied_doc of applied_docs) {
-            //データの取得を待機して実行
-            createSendData(applied_doc).then((applied) => {
-                applied_list.push(applied);
 
-                if (i == applied_docs.length) {
-                    event.sender.send("SEND_APPLIED_DATA", applied_list);
-                }
-                i++;
-            });
-        }
+        //全てのアクションデータを取得
+        db.actions.find({}, (err, actions) => {
+            if (err) return console.log(err);
+
+            //適用された動作データを取得
+            for (applied_doc of applied_docs) {
+                //データの取得を待機して実行
+                createSendData(applied_doc).then((applied) => {
+                    applied_list.push(applied);
+
+                    if (i == applied_docs.length) {
+                        //全アクションデータと適用データを送信
+                        event.sender.send("SEND_APPLIED_DATA", applied_list, actions);
+                    }
+                    i++;
+                });
+            }
+        });
     });
 });
 
@@ -85,9 +89,7 @@ ipcMain.on("UPDATE_APPLIED_DATA", (event, applied_list, gesture_type) => {
         //applied_listのIDと等しいnameをactionsから取得する
         db.actions.find({id: applied_list[i]}, 
             (err, docs) => {
-                if (err) {
-                    return console.log(err);
-                }
+                if (err) return console.log(err);
 
                 name = docs[0].name;  
                 //dbの情報を更新する
@@ -134,13 +136,28 @@ ipcMain.on("BT_CONNECT", (event, arg) => {
             win.loadFile("./app/html/allocation.html");
 
             //データを送信
-            btSerial.write(new Buffer("my data", "utf-8"), (err, bytesWritten) => {
-                if (err) console.log(err);
-            });
+            // btSerial.write(new Buffer("my data", "utf-8"), (err, bytesWritten) => {
+            //     if (err) console.log(err);
+            // });
 
             //データを受け取った際の処理
             btSerial.on("data", (buffer) => {
-                console.log(buffer.toString("utf-8"));
+                code = buffer.toString("utf-8");
+                console.log("code: " + code);
+
+                //受け取ったデータによる処理を開始
+                switch(code) {
+                    case "IR_FAILED":
+                    case null:
+                        console.log("IR_FAILED");
+                        win.webContents.send("IR_FAILED", "受信できませんでした");
+                        break;
+                    //ID生成時
+                    default:
+                        console.log("IR_SUCCESS");
+                        win.webContents.send("IR_SUCCESS", code);
+                        break;
+                }
             });
         }, () => {
             //connectのエラーコールバック
@@ -151,12 +168,41 @@ ipcMain.on("BT_CONNECT", (event, arg) => {
     }, () => {
         //findSerialPortChannelのエラーコールバック
         console.log("found nothing");
-        event.sender.send("FAILED", "接続に失敗")
+        event.sender.send("BT_FAILED", "接続に失敗")
         btSerial.close();
     });
 
     //デバイスの探索を開始
     btSerial.inquire();
+});
+
+//赤外線の受信を開始
+ipcMain.on("IR_CAPTURE", (event, arg) => {
+    //event.sender.send("IR_SUCCESS", "test data");
+    console.log("ADD_SIGNAL");
+    btSerial.write(new Buffer("ADD_SIGNAL", "utf-8"), (err, bytesWritten) => {
+        if (err) console.log(err);
+    });
+});
+
+//完了の通知を送る
+ipcMain.on("ENTRY_COMPLETE", (eveht, arg) => {
+    console.log("ENTRY_COMPLETE");
+    btSerial.write(new Buffer("COMPLETE", "utf-8"), (err, bytesWritten) => {
+        if (err) console.log(err);
+    });
+
+    //DBに保存する
+    db.actions.insert(
+        {
+            id: arg["id"],
+            name: arg["name"],
+            tag: arg["tag"]
+        },
+        (err, docs) => {
+            if (err) return console.log(err);
+        }
+    );
 });
 
 //名前付きパイプの作成
@@ -168,9 +214,19 @@ function createPipe() {
 
         //モーション検出を受け取ったらラズパイにデータを送信
         stream.on("data", (data) => {
-            console.log("Server on data: ", data.toString());
-            btSerial.write(new Buffer(data.toString(), "utf-8"), (err, bytesWritten) => {
-                if (err) console.log(err);
+            received = data.toString();
+            console.log("Server on data: ", received);
+            //DBからアクションに対応したidを取得する
+            db.applied.find({id: received}, (err, docs) => {
+                if (err) return console.log(err);
+
+                console.log("docs is " + docs);
+                signal = docs[0].action_id
+                console.log("send signal is: " + signal);
+                //ラズパイにidを送信
+                btSerial.write(new Buffer(signal, "utf-8"), (err, bytesWritten) => {
+                    if (err) console.log(err);
+                });
             });
         });
 
@@ -189,6 +245,7 @@ function createPipe() {
     });
 }
 
+//テストデータ生成用
 function addSeedData() {
     db.actions.remove({}, {multi: true}, (err, docs) => {});
     db.applied.remove({}, {multi: true}, (err, docs) => {});
