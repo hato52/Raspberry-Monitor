@@ -1,19 +1,4 @@
-{"id":"b8fc3d01f4104cad80826aa70fb8ce6d","name":"bbb","tag":"bbb","_id":"08Wm8d9XKkN0RgCw"}
-{"id":"004c7d7381a648a7bd46ca80bf9856e4","name":"test_dayo","tag":"hogehoge","_id":"5ReQArWqeQithtkn"}
-{"id":"dee14bd73d41450f9100ea93212ee505","name":"power_on4","tag":"tv","_id":"8dAdQvADVEKdJ4RA"}
-{"id":"e449b660798c4673ab2b251c6aab8620","name":"aaaaa","tag":"aaaa","_id":"Bs1VZw4hrDMeeieE"}
-{"id":"cbe4dcdb4ef7425b8f10ca86efca9b30","name":"power_on","tag":"TV","_id":"FX6BzlHjZridawjA"}
-{"id":"1b6aff9391334824876fee357cb5a635","name":"asdf","tag":"asdf","_id":"HYgfE0IDmkhSbojR"}
-{"id":"action_2","name":"test 2","tag":"aircon","status":2,"_id":"IzpV6Hb38dR8HBJt"}
-{"id":"0d49eb9100924d13b8bdc2429af085b0","name":"k","tag":"k","_id":"KleV4emjiCtnuNs3"}
-{"id":"2191e4d8fc9949f48e54d4dd530520c8","name":"power_on3","tag":"TV","_id":"LmjPdnMOJAuCm4Or"}
-{"id":"d2124af00dcd42d2835ac090379b38c8","name":"hogehoge","tag":"tvtv","_id":"Q13qJbMdha9Yc8ji"}
-{"id":"899a9e4cb4fc4a9ca7a4298048ab3000","name":"power_on","tag":"TV","_id":"Q6meL10sQmlYCfTs"}
-{"id":"3d7150f812cf46d394f3bee8ecc916de","name":"aaa","tag":"aa","_id":"W0K2DIotQMFoNwDN"}
-{"id":"386a779b30ac482d9e841bdf54a1bfb2","name":"sine","tag":"kasu","_id":"ZLVg1lwIGIsCNCXS"}
-{"id":"a32e3ef8921e42fe833ef756043ddc3e","name":"ccc","tag":"ccc","_id":"cBe7fWOAAC5SYSBp"}
-{"id":"action_5","name":"test 5","tag":"hoge","status":5,"_id":"hKUErZELznnPQljQ"}
-{"id":"action_1","name":"test 1","tag":"aircon","status":1,"_id":"iH0SaeDahhwby2jL"}
-{"id":"action_3","name":"test 3","tag":"aircon","status":3,"_id":"kWOd5NnzL6AWezYy"}
-{"id":"action_4","name":"test not use","tag":"aircon","status":0,"_id":"mC0arMnJB6dcncwJ"}
-{"id":"action_6","name":"test 6","tag":"aircon","status":6,"_id":"x3UytB50BSwPpeao"}
+{"id":"c5071eefab754710ab965de4eea2b450","name":"音量up","tag":"stereo","_id":"6OnvXu7a6ugCz3rc"}
+{"id":"be27975a637d46479036ae20a2cf9118","name":"ステレオ","tag":"stereo","_id":"FDiuFspLsHQvrTch"}
+{"id":"055bf6fb95994eb0be85fce02d6c1476","name":"音量down","tag":"stereo","_id":"VIRYdSJejVTZT9UZ"}
+{"id":"d7b03d173894499a8148f174cd87c024","name":"チャンネル切り替え","tag":"stereo","_id":"qqmpxLLIWorEMwQs"}

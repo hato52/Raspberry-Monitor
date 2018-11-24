@@ -13,7 +13,7 @@ app.on("ready", () => {
         height: 800,
         resizable: false
     });
-    win.loadFile("./app/html/index.html");
+    win.loadFile("./app/html/template.html");
     win.on("closed", () => {
         win = null;
     });
@@ -106,21 +106,6 @@ ipcMain.on("UPDATE_APPLIED_DATA", (event, applied_list, gesture_type) => {
     }
 });
 
-//プルダウンに適用するデータを作成
-function createSendData(applied_doc) {
-    return new Promise((resolve, reject) => {
-        let applied = {};
-
-        db.actions.find({id: applied_doc.action_id}, (err, actions_docs) => {
-            applied["id"] = applied_doc.id;
-            applied["action_id"] = actions_docs[0].id;
-            applied["action_name"] = actions_docs[0].name;
-
-            resolve(applied);
-        });
-    });
-}
-
 //Bluetoothでラズパイへの接続を行う
 ipcMain.on("BT_CONNECT", (event, arg) => {
     console.log("start search device");
@@ -189,7 +174,7 @@ ipcMain.on("IR_CAPTURE", (event, arg) => {
 ipcMain.on("ENTRY_COMPLETE", (eveht, arg) => {
     console.log("ENTRY_COMPLETE");
     btSerial.write(new Buffer("COMPLETE", "utf-8"), (err, bytesWritten) => {
-        if (err) console.log(err);
+        if (err) return console.log(err);
     });
 
     //DBに保存する
@@ -201,9 +186,54 @@ ipcMain.on("ENTRY_COMPLETE", (eveht, arg) => {
         },
         (err, docs) => {
             if (err) return console.log(err);
+            //更新されたDB情報を送る
+            db.actions.find({}, (err, docs) => {
+                if (err) return console.log(err);
+
+                event.sender.send("SEND_ACTION_DATA", docs);
+            });
         }
     );
 });
+
+//アクションの削除
+ipcMain.on("DB_REMOVE", (event, remove_id) => {
+    console.log("DB_REMOVE");
+    // btSerial.write(new Buffer("REMOVE", "utf-8"), (err, bytesWritten) => {
+    //     if (err) return console.log(err);
+    // });
+
+    //DBの中身を削除する
+    db.actions.remove({id: remove_id}, (err, docs) => {
+        if (err) return console.log(err);
+        //NeDBからデータを取り出す
+        db.actions.find({}, (err, docs) => {
+            if (err) return console.log(err);
+
+            event.sender.send("SEND_ACTION_DATA", docs);
+        });
+    });
+});
+
+//プルダウンに適用するデータを作成
+function createSendData(applied_doc) {
+    return new Promise((resolve, reject) => {
+        let applied = {};
+
+        db.actions.find({id: applied_doc.action_id}, (err, actions_docs) => {
+            if (err) return console.log(err);
+
+            applied["id"] = applied_doc.id;
+            if (actions_docs.length <= 0) {
+                applied["action_id"] = "";
+            }else{
+                applied["action_id"] = actions_docs[0].id;
+            }
+
+            resolve(applied);
+        });
+    });
+}
 
 //名前付きパイプの作成
 function createPipe() {
@@ -243,76 +273,4 @@ function createPipe() {
     server.listen(PIPE_NAME, () => {
         console.log("Server: on listening");
     });
-}
-
-//テストデータ生成用
-function addSeedData() {
-    db.actions.remove({}, {multi: true}, (err, docs) => {});
-    db.applied.remove({}, {multi: true}, (err, docs) => {});
-
-    db.actions.insert([
-        {
-            id: "action_1",
-            name: "test 1",
-            tag: "aircon",
-            status: 1
-        },
-        {
-            id: "action_2",
-            name: "test 2",
-            tag: "aircon",
-            status: 2
-        },
-        {
-            id: "action_3",
-            name: "test 3",
-            tag: "aircon",
-            status: 3
-        },
-        {
-            id: "action_4",
-            name: "test not use",
-            tag: "aircon",
-            status: 0
-        },
-        {
-            id: "action_5",
-            name: "test 5",
-            tag: "hoge",
-            status: 5
-        },
-        {
-            id: "action_6",
-            name: "test 6",
-            tag: "aircon",
-            status: 6
-        },
-    ]);
-
-    db.applied.insert([
-        {
-            id: "push",
-            action_id: "action_1"
-        },
-        {
-            id: "pull",
-            action_id: "action_2"
-        },
-        {
-            id: "up",
-            action_id: "action_3"
-        },
-        {
-            id: "down",
-            action_id: "action_4"
-        },
-        {
-            id: "right",
-            action_id: "action_5"
-        },
-        {
-            id: "left",
-            action_id: "action_6"
-        },
-    ]);
 }

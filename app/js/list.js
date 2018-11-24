@@ -1,15 +1,20 @@
-const {ipcRenderer} = nodeRequire("electron");
-
-let id;
-
-let vm = new Vue({
+vm_list = new Vue({
     el: "#list",
     data: {
         rows: [],
+    },
+    methods: {
+        removeRecord: function(remove_id) {
+            //指定したレコードの削除
+            if (confirm("本当に削除しますか？")) {
+                console.log(remove_id);
+                ipcRenderer.send("DB_REMOVE", remove_id);
+            }
+        }
     }
 });
 
-let index_vm = new Vue({
+index_vm = new Vue({
     el: "#modal_index",
     data: {
         progress: "",
@@ -59,7 +64,7 @@ let index_vm = new Vue({
     }
 });
 
-let entry_vm = new Vue({
+entry_vm = new Vue({
     el: "#modal_entry",
     data: {
         entry_name: "",
@@ -101,5 +106,5 @@ ipcRenderer.send("REQUEST_ACTION_DATA");
 
 //ジェスチャデータの内容をリストのビューモデルに反映
 ipcRenderer.on("SEND_ACTION_DATA", (event, actions) => {
-    vm.rows = actions;
+    vm_list.rows = actions;
 });
