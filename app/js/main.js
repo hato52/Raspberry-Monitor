@@ -1,7 +1,8 @@
 const {app, BrowserWindow, ipcMain} = require("electron");
 const btSerial = new (require("bluetooth-serial-port")).BluetoothSerialPort();
 const net = require("net");
-const NeDB = require("nedb")
+const NeDB = require("C:\\Users\\User\\ElectronProjects\\raspberry_monitor\\node_modules\\nedb")
+//const NeDB = require("nedb")
 
 let win;
 let db = {actions: "", applied: ""};
@@ -13,7 +14,7 @@ app.on("ready", () => {
         height: 800,
         resizable: false
     });
-    win.loadFile("./app/html/template.html");
+    win.loadFile("./app/html/index.html");
     win.on("closed", () => {
         win = null;
     });
@@ -118,7 +119,7 @@ ipcMain.on("BT_CONNECT", (event, arg) => {
         //接続した際の処理
         btSerial.connect(RASPBERRY_PI_ADDRESS, channel, () => {
             console.log("connected!");
-            win.loadFile("./app/html/allocation.html");
+            win.loadFile("./app/html/template.html");
 
             //データを送信
             // btSerial.write(new Buffer("my data", "utf-8"), (err, bytesWritten) => {
@@ -171,7 +172,7 @@ ipcMain.on("IR_CAPTURE", (event, arg) => {
 });
 
 //完了の通知を送る
-ipcMain.on("ENTRY_COMPLETE", (eveht, arg) => {
+ipcMain.on("ENTRY_COMPLETE", (event, arg) => {
     console.log("ENTRY_COMPLETE");
     btSerial.write(new Buffer("COMPLETE", "utf-8"), (err, bytesWritten) => {
         if (err) return console.log(err);
@@ -262,7 +263,7 @@ function createPipe() {
 
         stream.on("end", () => {
             console.log("Server on end");
-            server.close();
+            //server.close();
         });
     });
 

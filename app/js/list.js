@@ -41,10 +41,10 @@ index_vm = new Vue({
 			//受信成功
 			ipcRenderer.on("IR_SUCCESS", (event, arg) => {
                 id = arg;
+                this.progress = "";
+                this.isDisplayed = false;
                 $(".modal_index").modaal("close");
-                $(".modal_entry").modaal({
-                    start_open: true
-                });
+                $(".modal_entry").modaal("open");
 			});
             
             //受信失敗
@@ -52,7 +52,6 @@ index_vm = new Vue({
                 this.progress = arg;
                 this.isDisabled = false;
                 this.isDisplayed = false;
-                //$(".modal_index").modaal("close");
             });
 		},
 		cancelCapture: function() {
@@ -80,15 +79,9 @@ entry_vm = new Vue({
 
             //完了の通知とフォームのデータを送る
             ipcRenderer.send("ENTRY_COMPLETE", data_hash);
-            this.progress = "";
-            this.isDisabled = false;
-            this.isDisplayed = false;
             $(".modal_entry").modaal("close")
         },
-        cancelCapture: function() {
-            this.progress = arg;
-            this.isDisabled = false;
-            this.isDisplayed = false;
+        cancelEntry: function() {
             $(".modal_entry").modaal("close");
 		}
     }
@@ -100,6 +93,10 @@ $(".modal_index").modaal({
     overlay_close: false
 });
 
+$(".modal_entry").modaal({
+    hide_close: true,
+    overlay_close: false
+});
 
 //ジェスチャデータのリクエストを送信
 ipcRenderer.send("REQUEST_ACTION_DATA");
